@@ -25,7 +25,7 @@ function profile_skates_category() {
 
     read -r -d '' data_body << EOF
 [{
-    "MetricName": "category_page",
+    "MetricName": "category_page_internet",
     "Dimensions": [
       {
         "Name": "url",
