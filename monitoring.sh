@@ -10,12 +10,22 @@ export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 export AWS_DEFAULT_REGION=${AWS_REGION}
 
 SKATES_TARGET_URL=https://www.skates.ro/trotinete-freestyle
+SKATES_COMPANY=skates
+
+VELOTECA_TARGET_URL=https://www.veloteca.ro/catalog/biciclete-de-munte-166
+VELOTECA_COMPANY=veloteca
+
+DEPURTAT_TARGET_URL=https://www.depurtat.ro/ghete-dama
+DEPURTAT_COMPANY=depurtat
 
 function test_aws_connection() {
     aws s3 ls
 }
 
 function profile_skates_category() {
+    target_url=${1}
+    company=${2}
+
     start_time=$(date +%s%N | cut -b1-13)
     curl -v ${SKATES_TARGET_URL} --output - \
         -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0' \
@@ -29,7 +39,7 @@ function profile_skates_category() {
         -H 'Sec-Fetch-Mode: navigate' \
         -H 'Sec-Fetch-Site: none' \
         -H 'Sec-Fetch-User: ?1' \
-        --connection-timeout 10
+        --max-time 10
     end_time=$(date +%s%N | cut -b1-13)
 
     resp_time=$((end_time-start_time))
@@ -41,7 +51,11 @@ function profile_skates_category() {
     "Dimensions": [
       {
         "Name": "url",
-        "Value": "${SKATES_TARGET_URL}"
+        "Value": "${target_url}"
+      },
+      {
+        "Name": "company",
+        "Value": "${company}"
       }
     ],
     "Value": ${resp_time},
@@ -56,4 +70,6 @@ EOF
 }
 
 test_aws_connection
-profile_skates_category
+profile_skates_category ${SKATES_TARGET_URL} ${SKATES_COMPANY}
+profile_skates_category ${VELOTECA_TARGET_URL} ${VELOTECA_COMPANY}
+profile_skates_category ${DEPURTAT_TARGET_URL} ${DEPURTAT_COMPANY}
