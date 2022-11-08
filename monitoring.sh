@@ -18,9 +18,8 @@ VELOTECA_COMPANY=veloteca
 DEPURTAT_TARGET_URL=https://www.depurtat.ro/ghete-dama
 DEPURTAT_COMPANY=depurtat
 
-function test_aws_connection() {
-    aws s3 ls
-}
+UMAN_TARGET_URL=https://www.u-man.ro/catalog/tenisi-170
+UMAN_COMPANY=uman
 
 function profile_skates_category() {
     target_url=${1}
@@ -69,7 +68,7 @@ EOF
         --metric-data "${data_body}"
 }
 
-test_aws_connection
 profile_skates_category ${SKATES_TARGET_URL} ${SKATES_COMPANY}
 profile_skates_category ${VELOTECA_TARGET_URL} ${VELOTECA_COMPANY}
 profile_skates_category ${DEPURTAT_TARGET_URL} ${DEPURTAT_COMPANY}
+profile_skates_category ${UMAN_TARGET_URL} ${UMAN_COMPANY}
